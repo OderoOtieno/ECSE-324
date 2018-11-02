@@ -1,0 +1,348 @@
+
+P:/ECSE324/G39_Lab1/center.axf:     file format elf32-littlearm
+
+
+Disassembly of section .text:
+
+00000000 <__cs3_interrupt_vector>:
+//			.global _start
+
+
+//_start:		LDR R4, =RESULT		
+			
+			LDR R2, [R4, #4]
+   0:	e5942004 	ldr	r2, [r4, #4]
+			MOV R3, #0
+   4:	e3a03000 	mov	r3, #0
+			MOV R5, #0	
+   8:	e3a05000 	mov	r5, #0
+			MOV R6, #0
+   c:	e3a06000 	mov	r6, #0
+			LDR R7, [R4, #4]					
+  10:	e5947004 	ldr	r7, [r4, #4]
+			ADD R3, R4, #8		
+  14:	e2843008 	add	r3, r4, #8
+
+00000018 <SUMLOOP>:
+			
+
+SUMLOOP:	SUBS R2, R2, #1		
+  18:	e2522001 	subs	r2, r2, #1
+			BLT DONE			 
+  1c:	ba000003 	blt	30 <DONE>
+			LDR R1, [R3]				
+  20:	e5931000 	ldr	r1, [r3]
+			ADD R3, R3, #4 
+  24:	e2833004 	add	r3, r3, #4
+			ADD R5, R5, R1		
+  28:	e0855001 	add	r5, r5, r1
+			B SUMLOOP 			
+  2c:	eafffff9 	b	18 <SUMLOOP>
+
+00000030 <DONE>:
+
+DONE: 		ADD R0, R5, #0		
+  30:	e2850000 	add	r0, r5, #0
+
+00000034 <DIVSHIFT>:
+
+DIVSHIFT: 	SUBS R7, R7, #1		
+  34:	e2577001 	subs	r7, r7, #1
+			CMP R7, #1			
+  38:	e3570001 	cmp	r7, #1
+			BEQ AVG	
+  3c:	0a000002 	beq	4c <AVG>
+			ADD R6, R6, #1			
+  40:	e2866001 	add	r6, r6, #1
+			ASR R0, #1				
+  44:	e1a000c0 	asr	r0, r0, #1
+			B DIVSHIFT
+  48:	eafffff9 	b	34 <DIVSHIFT>
+
+0000004c <AVG>:
+
+AVG:		ASR R5, R5, R6		
+  4c:	e1a05655 	asr	r5, r5, r6
+			ADD R3, R4, #8		
+  50:	e2843008 	add	r3, r4, #8
+			LDR R7, [R4, #4]
+  54:	e5947004 	ldr	r7, [r4, #4]
+
+00000058 <SUBLOOP>:
+
+SUBLOOP:	SUBS R7, R7, #1	
+  58:	e2577001 	subs	r7, r7, #1
+			BLT END				
+  5c:	ba000004 	blt	74 <END>
+			LDR R1, [R3]		
+  60:	e5931000 	ldr	r1, [r3]
+			SUB R1, R1, R5		
+  64:	e0411005 	sub	r1, r1, r5
+			STR R1, [R3]		
+  68:	e5831000 	str	r1, [r3]
+			ADD R3, R3, #4 		
+  6c:	e2833004 	add	r3, r3, #4
+
+			B SUBLOOP 			
+  70:	eafffff8 	b	58 <SUBLOOP>
+
+00000074 <END>:
+
+END:		B END 				
+  74:	eafffffe 	b	74 <END>
+
+00000078 <RESULT>:
+  78:	00000000 	.word	0x00000000
+
+0000007c <N>:
+  7c:	00000004 	.word	0x00000004
+
+00000080 <NUMBERS>:
+  80:	00000005 	.word	0x00000005
+  84:	00000004 	.word	0x00000004
+  88:	00000001 	.word	0x00000001
+  8c:	00000006 	.word	0x00000006
+  90:	0000000a 	.word	0x0000000a
+  94:	0000000c 	.word	0x0000000c
+  98:	0000000e 	.word	0x0000000e
+  9c:	0000000f 	.word	0x0000000f
+			.text
+			//.global _start
+
+//_start:
+			LDR R4, =MAXRESULT
+  a0:	e59f409c 	ldr	r4, [pc, #156]	; 144 <MINRESULT+0x4>
+			LDR R2, [R4, #4]
+  a4:	e5942004 	ldr	r2, [r4, #4]
+			ADD R3,R4, #8
+  a8:	e2843008 	add	r3, r4, #8
+			LDR R0, [R3]
+  ac:	e5930000 	ldr	r0, [r3]
+			LDR R5, =MINRESULT
+  b0:	e59f5090 	ldr	r5, [pc, #144]	; 148 <MINRESULT+0x8>
+
+000000b4 <LOOP1>:
+
+			
+LOOP1:		SUBS R2, R2, #1
+  b4:	e2522001 	subs	r2, r2, #1
+			BEQ STORE
+  b8:	0a000005 	beq	d4 <STORE>
+			ADD R3, R3, #4
+  bc:	e2833004 	add	r3, r3, #4
+			LDR R1, [R3]
+  c0:	e5931000 	ldr	r1, [r3]
+			CMP R0, R1
+  c4:	e1500001 	cmp	r0, r1
+			BGE LOOP1
+  c8:	aafffff9 	bge	b4 <LOOP1>
+			MOV R0, R1
+  cc:	e1a00001 	mov	r0, r1
+			B LOOP1
+  d0:	eafffff7 	b	b4 <LOOP1>
+
+000000d4 <STORE>:
+
+STORE: 		STR R0, [R4]
+  d4:	e5840000 	str	r0, [r4]
+			LDR R0, [R4]
+  d8:	e5940000 	ldr	r0, [r4]
+
+			LDR R2, [R4, #4]
+  dc:	e5942004 	ldr	r2, [r4, #4]
+			ADD R3,R4, #8
+  e0:	e2843008 	add	r3, r4, #8
+			LDR R0, [R3]
+  e4:	e5930000 	ldr	r0, [r3]
+			B LOOP2
+  e8:	eaffffff 	b	ec <LOOP2>
+
+000000ec <LOOP2>:
+
+LOOP2:		SUBS R2, R2, #1
+  ec:	e2522001 	subs	r2, r2, #1
+			BEQ DONE
+  f0:	0a000005 	beq	10c <DONE>
+			ADD R3, R3, #4
+  f4:	e2833004 	add	r3, r3, #4
+			LDR R1, [R3]
+  f8:	e5931000 	ldr	r1, [r3]
+			CMP R0, R1
+  fc:	e1500001 	cmp	r0, r1
+			BLE LOOP2
+ 100:	dafffff9 	ble	ec <LOOP2>
+			MOV R0, R1
+ 104:	e1a00001 	mov	r0, r1
+			B LOOP2
+ 108:	eafffff7 	b	ec <LOOP2>
+
+0000010c <DONE>:
+
+DONE:		LDR R4,[R4]
+ 10c:	e5944000 	ldr	r4, [r4]
+			SUBS R4,R4,R0
+ 110:	e0544000 	subs	r4, r4, r0
+			ASR R4,R4,#2
+ 114:	e1a04144 	asr	r4, r4, #2
+
+00000118 <END>:
+
+END:		B END
+ 118:	eafffffe 	b	118 <END>
+
+0000011c <MAXRESULT>:
+ 11c:	00000000 	.word	0x00000000
+
+00000120 <N>:
+ 120:	00000007 	.word	0x00000007
+
+00000124 <NUMBERS>:
+ 124:	00000004 	.word	0x00000004
+ 128:	00000005 	.word	0x00000005
+ 12c:	00000003 	.word	0x00000003
+ 130:	0000000a 	.word	0x0000000a
+ 134:	00000001 	.word	0x00000001
+ 138:	00000008 	.word	0x00000008
+ 13c:	00000002 	.word	0x00000002
+
+00000140 <MINRESULT>:
+ 140:	00000000 	.word	0x00000000
+ 144:	0000011c 	.word	0x0000011c
+ 148:	00000140 	.word	0x00000140
+
+0000014c <_start>:
+		.equ HEX_BASE_TWO, 0xFF200030 //base memory address of HEX display 4-5
+		.equ input, 0x3F
+
+
+
+_start:			LDR R1, =HEX_BASE_ONE
+ 14c:	e59f1034 	ldr	r1, [pc, #52]	; 188 <STORE+0x18>
+				LDR R2, =HEX_BASE_TWO
+ 150:	e59f2034 	ldr	r2, [pc, #52]	; 18c <STORE+0x1c>
+				LDR R0,=input
+ 154:	e3a0003f 	mov	r0, #63	; 0x3f
+				MOV R3, #0 //counter for which display we are at
+ 158:	e3a03000 	mov	r3, #0
+
+0000015c <LIGHT_LOOP_BASE_ONE>:
+				
+
+
+LIGHT_LOOP_BASE_ONE:
+
+						MOV R4,#1 //and comparison
+ 15c:	e3a04001 	mov	r4, #1
+						AND R4,R0,R4
+ 160:	e0004004 	and	r4, r0, r4
+						MOV R6,#0x7F //the full highlight code
+ 164:	e3a0607f 	mov	r6, #127	; 0x7f
+						CMP R4,#1
+ 168:	e3540001 	cmp	r4, #1
+						BEQ STORE 
+ 16c:	0affffff 	beq	170 <STORE>
+
+00000170 <STORE>:
+
+STORE:					STR R6,[R1]
+ 170:	e5816000 	str	r6, [r1]
+						ASR R0,R0,#1
+ 174:	e1a000c0 	asr	r0, r0, #1
+						ADD R1,R1,#1 //increments the address by 1 byte
+ 178:	e2811001 	add	r1, r1, #1
+						CMP R3,#4
+ 17c:	e3530004 	cmp	r3, #4
+					
+						ADD R3,R3,#1
+ 180:	e2833001 	add	r3, r3, #1
+						B LIGHT_LOOP_BASE_ONE
+ 184:	eafffff4 	b	15c <LIGHT_LOOP_BASE_ONE>
+ 188:	ff200020 	.word	0xff200020
+ 18c:	ff200030 	.word	0xff200030
+			.text
+	//		.global _start
+
+//_start:		
+			LDR R4, =N		
+ 190:	e59f407c 	ldr	r4, [pc, #124]	; 214 <NUMBERS+0x10>
+			LDR R0, [R4]		
+ 194:	e5940000 	ldr	r0, [r4]
+			
+			MOV R1, #0		
+ 198:	e3a01000 	mov	r1, #0
+			MOV R10, #1
+ 19c:	e3a0a001 	mov	r10, #1
+
+000001a0 <WHILELOOP>:
+		
+
+WHILELOOP:	CMP R1, R10 						
+ 1a0:	e151000a 	cmp	r1, r10
+			BEQ END			
+ 1a4:	0a000014 	beq	1fc <END>
+			MOV R1, #1			
+ 1a8:	e3a01001 	mov	r1, #1
+			MOV R5, #1			
+ 1ac:	e3a05001 	mov	r5, #1
+			ADD R2, R4, #0		
+ 1b0:	e2842000 	add	r2, r4, #0
+			ADD R3, R4, #4	
+ 1b4:	e2843004 	add	r3, r4, #4
+
+			B FORLOOP						
+ 1b8:	eaffffff 	b	1bc <FORLOOP>
+
+000001bc <FORLOOP>:
+
+FORLOOP:	CMP R5, R0					
+ 1bc:	e1550000 	cmp	r5, r0
+			BGE WHILELOOP		
+ 1c0:	aafffff6 	bge	1a0 <WHILELOOP>
+			ADD R5, R5, #1		
+ 1c4:	e2855001 	add	r5, r5, #1
+
+			ADD R2, #4			
+ 1c8:	e2822004 	add	r2, r2, #4
+			ADD R3, #4			
+ 1cc:	e2833004 	add	r3, r3, #4
+
+			LDR R6, [R2]		
+ 1d0:	e5926000 	ldr	r6, [r2]
+			LDR R7, [R3]		
+ 1d4:	e5937000 	ldr	r7, [r3]
+
+			CMP R6, R7			
+ 1d8:	e1560007 	cmp	r6, r7
+			BLE	FORLOOP		
+ 1dc:	dafffff6 	ble	1bc <FORLOOP>
+								
+		 	MOV R8, R6			
+ 1e0:	e1a08006 	mov	r8, r6
+			MOV R6, R7			
+ 1e4:	e1a06007 	mov	r6, r7
+			MOV R7, R8			
+ 1e8:	e1a07008 	mov	r7, r8
+			STR R6, [R2]		
+ 1ec:	e5826000 	str	r6, [r2]
+			STR R7, [R3]		
+ 1f0:	e5837000 	str	r7, [r3]
+			MOV R1, #0			
+ 1f4:	e3a01000 	mov	r1, #0
+			
+			B FORLOOP
+ 1f8:	eaffffef 	b	1bc <FORLOOP>
+
+000001fc <END>:
+
+END:	 	B END
+ 1fc:	eafffffe 	b	1fc <END>
+
+00000200 <N>:
+ 200:	00000004 	.word	0x00000004
+
+00000204 <NUMBERS>:
+ 204:	00000005 	.word	0x00000005
+ 208:	00000004 	.word	0x00000004
+ 20c:	00000001 	.word	0x00000001
+ 210:	00000003 	.word	0x00000003
+ 214:	00000200 	.word	0x00000200

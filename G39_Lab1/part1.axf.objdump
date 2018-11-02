@@ -1,0 +1,319 @@
+
+P:/ECSE324/G39_Lab1/part1.axf:     file format elf32-littlearm
+
+
+Disassembly of section .text:
+
+00000000 <__cs3_interrupt_vector>:
+
+
+
+//Write to display
+_start: //assume R0 and R1 have argument 1 and argument 2
+				MOV R0,#0x3F
+   0:	e3a0003f 	mov	r0, #63	; 0x3f
+				MOV R1,#1
+   4:	e3a01001 	mov	r1, #1
+
+				CMP R1, #0
+   8:	e3510000 	cmp	r1, #0
+				BEQ IS_ZERO //move to 0 branch
+   c:	0a000029 	beq	b8 <IS_ZERO>
+
+				CMP R1, #1
+  10:	e3510001 	cmp	r1, #1
+				BEQ IS_ONE//move to 1 branch
+  14:	0a000029 	beq	c0 <IS_ONE>
+
+				CMP R1, #2
+  18:	e3510002 	cmp	r1, #2
+				BEQ IS_TWO//move to 2 branch
+  1c:	0a000029 	beq	c8 <IS_TWO>
+
+				CMP R1, #3
+  20:	e3510003 	cmp	r1, #3
+				BEQ IS_THREE//move to 3 branch
+  24:	0a000029 	beq	d0 <IS_THREE>
+
+
+				CMP R1, #4
+  28:	e3510004 	cmp	r1, #4
+				BEQ IS_FOUR//move to 4 branch
+  2c:	0a000029 	beq	d8 <IS_FOUR>
+
+				CMP R1, #5
+  30:	e3510005 	cmp	r1, #5
+				BEQ IS_FIVE//move to 5 branch
+  34:	0a000029 	beq	e0 <IS_FIVE>
+				
+				CMP R1, #6
+  38:	e3510006 	cmp	r1, #6
+				BEQ IS_SIX//move to 6 branch
+  3c:	0a000029 	beq	e8 <IS_SIX>
+				
+				CMP R1, #7
+  40:	e3510007 	cmp	r1, #7
+				BEQ IS_SEVEN//move to 7 branch
+  44:	0a000029 	beq	f0 <IS_SEVEN>
+
+				CMP R1, #8
+  48:	e3510008 	cmp	r1, #8
+				BEQ IS_EIGHT//move to 8 branch
+  4c:	0a000029 	beq	f8 <IS_EIGHT>
+
+				CMP R1, #9
+  50:	e3510009 	cmp	r1, #9
+				BEQ IS_NINE//move to 9 branch
+  54:	0a000029 	beq	100 <IS_NINE>
+				
+				CMP R1, #0xA
+  58:	e351000a 	cmp	r1, #10
+				BEQ IS_TEN//move to A branch, Follwing we will implenment two sets of rules, i.e., input "10" as well as 'A' will both show "A"
+  5c:	0a000029 	beq	108 <IS_TEN>
+				CMP R1, #0x41
+  60:	e3510041 	cmp	r1, #65	; 0x41
+				BEQ IS_TEN//move to 0 branch
+  64:	0a000027 	beq	108 <IS_TEN>
+
+				CMP R1, #0xB
+  68:	e351000b 	cmp	r1, #11
+				BEQ IS_ELEVEN
+  6c:	0a000027 	beq	110 <IS_ELEVEN>
+				CMP R1, #0x42
+  70:	e3510042 	cmp	r1, #66	; 0x42
+				BEQ IS_ELEVEN
+  74:	0a000025 	beq	110 <IS_ELEVEN>
+
+				CMP R1, #0xC
+  78:	e351000c 	cmp	r1, #12
+				BEQ IS_TWELVE
+  7c:	0a000025 	beq	118 <IS_TWELVE>
+				CMP R1, #0x43
+  80:	e3510043 	cmp	r1, #67	; 0x43
+				BEQ IS_TWELVE
+  84:	0a000023 	beq	118 <IS_TWELVE>
+
+
+        		CMP R1, #0xD
+  88:	e351000d 	cmp	r1, #13
+				BEQ IS_THIRTEEN
+  8c:	0a000023 	beq	120 <IS_THIRTEEN>
+        		CMP R1, #0x44
+  90:	e3510044 	cmp	r1, #68	; 0x44
+				BEQ IS_THIRTEEN
+  94:	0a000021 	beq	120 <IS_THIRTEEN>
+
+
+        		CMP R1, #0xE
+  98:	e351000e 	cmp	r1, #14
+				BEQ IS_FOURTEEN
+  9c:	0a000021 	beq	128 <IS_FOURTEEN>
+        		CMP R1, #0x45
+  a0:	e3510045 	cmp	r1, #69	; 0x45
+				BEQ IS_FOURTEEN
+  a4:	0a00001f 	beq	128 <IS_FOURTEEN>
+
+
+        		CMP R1, #0xF
+  a8:	e351000f 	cmp	r1, #15
+				BEQ IS_FIFTEEN
+  ac:	0a00001f 	beq	130 <IS_FIFTEEN>
+        		CMP R1, #0x46
+  b0:	e3510046 	cmp	r1, #70	; 0x46
+				BEQ IS_FIFTEEN
+  b4:	0a00001d 	beq	130 <IS_FIFTEEN>
+
+000000b8 <IS_ZERO>:
+ 		
+
+IS_ZERO: MOV R3,#0x3F
+  b8:	e3a0303f 	mov	r3, #63	; 0x3f
+						B DISPLAY
+  bc:	ea00001d 	b	138 <DISPLAY>
+
+000000c0 <IS_ONE>:
+
+
+IS_ONE: MOV R3,#0x06
+  c0:	e3a03006 	mov	r3, #6
+						B DISPLAY
+  c4:	ea00001b 	b	138 <DISPLAY>
+
+000000c8 <IS_TWO>:
+
+
+IS_TWO:MOV R3,#0x5B
+  c8:	e3a0305b 	mov	r3, #91	; 0x5b
+						B DISPLAY
+  cc:	ea000019 	b	138 <DISPLAY>
+
+000000d0 <IS_THREE>:
+
+
+IS_THREE:MOV R3,#0x4F
+  d0:	e3a0304f 	mov	r3, #79	; 0x4f
+						B DISPLAY
+  d4:	ea000017 	b	138 <DISPLAY>
+
+000000d8 <IS_FOUR>:
+
+
+IS_FOUR:MOV R3,#0x66
+  d8:	e3a03066 	mov	r3, #102	; 0x66
+						B DISPLAY
+  dc:	ea000015 	b	138 <DISPLAY>
+
+000000e0 <IS_FIVE>:
+
+
+IS_FIVE:MOV R3,#0x6D
+  e0:	e3a0306d 	mov	r3, #109	; 0x6d
+						B DISPLAY
+  e4:	ea000013 	b	138 <DISPLAY>
+
+000000e8 <IS_SIX>:
+
+
+IS_SIX:MOV R3,#0x7D
+  e8:	e3a0307d 	mov	r3, #125	; 0x7d
+						B DISPLAY
+  ec:	ea000011 	b	138 <DISPLAY>
+
+000000f0 <IS_SEVEN>:
+
+
+IS_SEVEN:MOV R3,#0x07
+  f0:	e3a03007 	mov	r3, #7
+						B DISPLAY
+  f4:	ea00000f 	b	138 <DISPLAY>
+
+000000f8 <IS_EIGHT>:
+
+
+IS_EIGHT:MOV R3,#0x7F
+  f8:	e3a0307f 	mov	r3, #127	; 0x7f
+						B DISPLAY
+  fc:	ea00000d 	b	138 <DISPLAY>
+
+00000100 <IS_NINE>:
+
+
+IS_NINE:MOV R3,#0x6F
+ 100:	e3a0306f 	mov	r3, #111	; 0x6f
+						B DISPLAY
+ 104:	ea00000b 	b	138 <DISPLAY>
+
+00000108 <IS_TEN>:
+
+
+IS_TEN:MOV R3,#0x77
+ 108:	e3a03077 	mov	r3, #119	; 0x77
+						B DISPLAY
+ 10c:	ea000009 	b	138 <DISPLAY>
+
+00000110 <IS_ELEVEN>:
+
+
+IS_ELEVEN:MOV R3,#0x7C
+ 110:	e3a0307c 	mov	r3, #124	; 0x7c
+						B DISPLAY
+ 114:	ea000007 	b	138 <DISPLAY>
+
+00000118 <IS_TWELVE>:
+
+
+IS_TWELVE:MOV R3,#0x39
+ 118:	e3a03039 	mov	r3, #57	; 0x39
+						B DISPLAY
+ 11c:	ea000005 	b	138 <DISPLAY>
+
+00000120 <IS_THIRTEEN>:
+
+
+IS_THIRTEEN:MOV R3,#0x5E
+ 120:	e3a0305e 	mov	r3, #94	; 0x5e
+						B DISPLAY
+ 124:	ea000003 	b	138 <DISPLAY>
+
+00000128 <IS_FOURTEEN>:
+
+
+IS_FOURTEEN:MOV R3,#0x79
+ 128:	e3a03079 	mov	r3, #121	; 0x79
+						B DISPLAY
+ 12c:	ea000001 	b	138 <DISPLAY>
+
+00000130 <IS_FIFTEEN>:
+
+
+IS_FIFTEEN:MOV R3,#0x71
+ 130:	e3a03071 	mov	r3, #113	; 0x71
+						B DISPLAY
+ 134:	eaffffff 	b	138 <DISPLAY>
+
+00000138 <DISPLAY>:
+
+
+DISPLAY:	  //R0 has the input value
+                LDR R1, =HEX_BASE_ONE //R1 will have the base address of the display
+ 138:	e59f1048 	ldr	r1, [pc, #72]	; 188 <DONE+0x4>
+                MOV R2,#0 //The counter for the displaY
+ 13c:	e3a02000 	mov	r2, #0
+				MOV R7,R3
+ 140:	e1a07003 	mov	r7, r3
+                MOV R4,#0 // Will hold value of the current displays being lit
+ 144:	e3a04000 	mov	r4, #0
+
+00000148 <DISPLAY_LOOP>:
+
+
+DISPLAY_LOOP:   CMP R2, #4
+ 148:	e3520004 	cmp	r2, #4
+                LDREQ R1, =HEX_BASE_TWO
+ 14c:	059f1038 	ldreq	r1, [pc, #56]	; 18c <DONE+0x8>
+				MOVEQ R3,R7
+ 150:	01a03007 	moveq	r3, r7
+				CMP R2,#6
+ 154:	e3520006 	cmp	r2, #6
+				BEQ DONE
+ 158:	0a000009 	beq	184 <DONE>
+//to here
+
+                AND R5,R0,#1 //checks R5 will hold the result if the LSB is 1
+ 15c:	e2005001 	and	r5, r0, #1
+				ASR R0,R0,#1
+ 160:	e1a000c0 	asr	r0, r0, #1
+                CMP R5,#0 //If the LSB is off jump to SHIFT_TO_NEXT_DISPLAY
+ 164:	e3550000 	cmp	r5, #0
+                BEQ SHIFT_TO_NEXT_WRITE_DISPLAY
+ 168:	0a000002 	beq	178 <SHIFT_TO_NEXT_WRITE_DISPLAY>
+
+                //If the LSB is ON, write to the address to turn it ON
+                LDR R6,[R1]
+ 16c:	e5916000 	ldr	r6, [r1]
+                ORR R6,R6,R3
+ 170:	e1866003 	orr	r6, r6, r3
+				STR R6,[R1]
+ 174:	e5816000 	str	r6, [r1]
+
+00000178 <SHIFT_TO_NEXT_WRITE_DISPLAY>:
+
+
+
+
+SHIFT_TO_NEXT_WRITE_DISPLAY:  LSL R3,#8
+ 178:	e1a03403 	lsl	r3, r3, #8
+                        ADD R2, R2, #1
+ 17c:	e2822001 	add	r2, r2, #1
+						B DISPLAY_LOOP
+ 180:	eafffff0 	b	148 <DISPLAY_LOOP>
+
+00000184 <DONE>:
+
+
+
+
+DONE: BX LR
+ 184:	e12fff1e 	bx	lr
+ 188:	ff200020 	.word	0xff200020
+ 18c:	ff200030 	.word	0xff200030

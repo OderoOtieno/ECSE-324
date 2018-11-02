@@ -1,0 +1,187 @@
+
+P:/ECSE324/G39_Lab2/stack.axf:     file format elf32-littlearm
+
+
+Disassembly of section .text:
+
+00000000 <__cs3_interrupt_vector>:
+
+//_start:
+			//LDR R0, =ARRAY //Array of numbers to go through
+			//LDR R1, =N //Number of elements in ARRAY
+			//LDR R1, [R1]
+			MOV R0,#2
+   0:	e3a00002 	mov	r0, #2
+			MOV R2, #4
+   4:	e3a02004 	mov	r2, #4
+
+00000008 <PUSH>:
+			
+
+
+PUSH:		STR R0, [SP,#-4]!
+   8:	e52d0004 	push	{r0}		; (str r0, [sp, #-4]!)
+
+0000000c <POP>:
+POP:		LDR R0, [SP],#4
+   c:	e49d0004 	pop	{r0}		; (ldr r0, [sp], #4)
+
+00000010 <END>:
+
+END:		B END
+  10:	eafffffe 	b	10 <END>
+
+00000014 <ARRAY>:
+  14:	00000001 	.word	0x00000001
+  18:	00000002 	.word	0x00000002
+  1c:	00000003 	.word	0x00000003
+  20:	00000004 	.word	0x00000004
+
+00000024 <N>:
+  24:	00000004 	.word	0x00000004
+
+00000028 <_start>:
+			.text
+			.global _start
+
+_start:
+			LDR R1,=NUMBERS //register that will be iterated upon
+  28:	e59f106c 	ldr	r1, [pc, #108]	; 9c <NUMBERS+0x1c>
+			LDR R2,[R1] //max
+  2c:	e5912000 	ldr	r2, [r1]
+			LDR R3,=N //counter
+  30:	e59f3068 	ldr	r3, [pc, #104]	; a0 <NUMBERS+0x20>
+			LDR R3,[R3]
+  34:	e5933000 	ldr	r3, [r3]
+			LDR R0,[R1]
+  38:	e5910000 	ldr	r0, [r1]
+			BL SUBROUTINE
+  3c:	eb000000 	bl	44 <SUBROUTINE>
+			B END
+  40:	ea00000b 	b	74 <END>
+
+00000044 <SUBROUTINE>:
+			
+SUBROUTINE:	PUSH {LR}
+  44:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
+			BL LOOP
+  48:	ebffffff 	bl	4c <LOOP>
+
+0000004c <LOOP>:
+			
+LOOP:		SUBS R3, R3, #1
+  4c:	e2533001 	subs	r3, r3, #1
+			BEQ DONE
+  50:	0a000005 	beq	6c <DONE>
+			ADD R1,R1,#4
+  54:	e2811004 	add	r1, r1, #4
+			LDR R2,[R1]
+  58:	e5912000 	ldr	r2, [r1]
+			CMP R0,R2 
+  5c:	e1500002 	cmp	r0, r2
+			BGE LOOP
+  60:	aafffff9 	bge	4c <LOOP>
+			MOV R0, R2
+  64:	e1a00002 	mov	r0, r2
+			B LOOP
+  68:	eafffff7 	b	4c <LOOP>
+
+0000006c <DONE>:
+
+DONE:	
+			POP {LR}
+  6c:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
+			BX LR
+  70:	e12fff1e 	bx	lr
+
+00000074 <END>:
+
+END:		B END
+  74:	eafffffe 	b	74 <END>
+
+00000078 <RESULT>:
+  78:	00000000 	.word	0x00000000
+
+0000007c <N>:
+  7c:	00000007 	.word	0x00000007
+
+00000080 <NUMBERS>:
+  80:	00000004 	.word	0x00000004
+  84:	00000005 	.word	0x00000005
+  88:	00000003 	.word	0x00000003
+  8c:	00000006 	.word	0x00000006
+  90:	00000001 	.word	0x00000001
+  94:	00000008 	.word	0x00000008
+  98:	00000002 	.word	0x00000002
+  9c:	00000080 	.word	0x00000080
+  a0:	0000007c 	.word	0x0000007c
+			.text
+			.global _start
+
+//_start:
+			MOV R0,#0
+  a4:	e3a00000 	mov	r0, #0
+			LDR R1,=N //Fibonacci amount
+  a8:	e59f104c 	ldr	r1, [pc, #76]	; fc <ARRAY+0x4>
+			LDR R1,[R1]
+  ac:	e5911000 	ldr	r1, [r1]
+			LDR R2,=ARRAY
+  b0:	e59f2048 	ldr	r2, [pc, #72]	; 100 <ARRAY+0x8>
+			LDR R2,[R2]
+  b4:	e5922000 	ldr	r2, [r2]
+			BL FIBONACCI
+  b8:	eb000000 	bl	c0 <FIBONACCI>
+			B END
+  bc:	ea00000a 	b	ec <END>
+
+000000c0 <FIBONACCI>:
+			
+FIBONACCI:	PUSH {LR,R1}
+  c0:	e92d4002 	push	{r1, lr}
+			CMP R1,#2
+  c4:	e3510002 	cmp	r1, #2
+			MOVLT R0,#1
+  c8:	b3a00001 	movlt	r0, #1
+			SUBS R1,R1,#1
+  cc:	e2511001 	subs	r1, r1, #1
+			//POPLT {LR,R1}
+			BL FIBONACCI
+  d0:	ebfffffa 	bl	c0 <FIBONACCI>
+
+			CMP R1,#2
+  d4:	e3510002 	cmp	r1, #2
+			MOVLT R0,#1
+  d8:	b3a00001 	movlt	r0, #1
+			SUBS R1,R1,#1
+  dc:	e2511001 	subs	r1, r1, #1
+			//POPLT {LR,R1}
+			BL FIBONACCI
+  e0:	ebfffff6 	bl	c0 <FIBONACCI>
+
+000000e4 <BASE>:
+
+BASE:		MOV R0,#1
+  e4:	e3a00001 	mov	r0, #1
+
+000000e8 <DONE>:
+			
+
+
+DONE:		B END
+  e8:	eaffffff 	b	ec <END>
+
+000000ec <END>:
+
+END:		B END
+  ec:	eafffffe 	b	ec <END>
+
+000000f0 <RESULT>:
+  f0:	00000000 	.word	0x00000000
+
+000000f4 <N>:
+  f4:	00000003 	.word	0x00000003
+
+000000f8 <ARRAY>:
+  f8:	00000000 	.word	0x00000000
+  fc:	000000f4 	.word	0x000000f4
+ 100:	000000f8 	.word	0x000000f8

@@ -1,7 +1,7 @@
 			.text
-			.global _start
+			//.global _start
 
-_start:
+//_start:
 			LDR R4, =MAXRESULT
 			LDR R2, [R4, #4]
 			ADD R3,R4, #8
@@ -35,14 +35,14 @@ LOOP2:		SUBS R2, R2, #1
 			MOV R0, R1
 			B LOOP2
 
-DONE:		STR R0, [R5]
-			SUBS R4, R4,R5
-			LSR R4, R4,#2
+DONE:		LDR R4,[R4]
+			SUBS R4,R4,R0
+			ASR R4,R4,#2
 
 END:		B END
 
 MAXRESULT:		.word	0
-N:			.word	7
-NUMBERS:	.word	4, 5, 3, 6
-			.word	1, 8, 2
+N:				.word	7
+NUMBERS:	.word	4, 5, 3, 10
+				.word	1, 8, 2
 MINRESULT:		.word	0
