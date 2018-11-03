@@ -1,7 +1,9 @@
 #ifndef _ISRS
 #define _ISRS
 
-	extern volatile int hps_tim0_int_flag;
+	extern volatile int hps_tim0_int_flag; //timer flags
+	extern volatile int pb_int_flag; // pushbuttons flag
+
 
 	extern void A9_PRIV_TIM_ISR();
 	extern void HPS_GPIO1_ISR();
