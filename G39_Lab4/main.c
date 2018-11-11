@@ -2,8 +2,11 @@
 #include "./drivers/inc/VGA.h"
 #include "./drivers/inc/slider_switches.h"
 #include "./drivers/inc/pushbuttons.h"
+#include "./drivers/inc/ps2_keyboard.h"
+#include "./drivers/inc/audio.h"
 
 
+/*
 void test_char(){
     int x,y;
     char c=0;
@@ -22,7 +25,7 @@ void test_byte(){
     for(y=0; y<=59 ; y++){
         for(x=0;x<=79; x+=3){
             VGA_write_byte_ASM(x,y,c++);
-        }
+}
     }
 }
 
@@ -42,32 +45,94 @@ int main (){
 	while(1){
 		int switches = read_slider_switches_ASM();
 		int PB = read_PB_data_ASM();
-		switch(PB){
-            case 1:
+        if(PB==1){
                 if( switches == 0 ){ //if switch is off
 					test_char();
-					break;
                 }
                 else{
                     test_byte();
-					break;
                 }
-            case 2:
-                test_pixel();
-				break;
-
-            case 4:
-                VGA_clear_charbuff_ASM();
-				break;
-
-            case 8:
-                VGA_clear_pixelbuff_ASM();
-				break;
         }
+        else if (PB==2){
+            test_pixel();
+			
+        }
+        else if(PB==4){
+            VGA_clear_charbuff_ASM();
+			
+        }
+
+        else if(PB==8){
+                VGA_clear_pixelbuff_ASM();
+        }
+        
 
 	}
     return 0;
 
+}
+
+*/
+/*
+
+int main(){
+	int x=0;
+	int y=0;
+	int x_max = 80;
+	int y_max = 60;	
+	char data;
+	char *dataPointer=&data;	
+
+    while(1){
+		int read_data = read_PS2_data_ASM(dataPointer);
+		if(read_data){
+			VGA_write_byte_ASM(x,y,*dataPointer);
+			x= x+3; //skip 2 bytes and a space to input a new set
+					//of 2 bytes
+				if(x>=x_max){
+					x=0;
+					y=y+1;
+				}
+				if(y>=y_max){
+				//clean display and start from y=0 the top again
+					VGA_clear_charbuff_ASM();
+					y=0;
+				}
+		}
+
+			
+        
+
+    }
 
 }
 
+
+*/
+
+
+//write_audio_data_ASM
+
+
+
+int main()
+{
+	
+	//For 48k sample per second, and in order to get a 100Hz wave, we can obtain 48k/100=480. 480/2=240
+	while(1){
+	int a = 0;
+	int b = 0;
+		while(a < 240){
+			if(write_audio_data_ASM(0X00FFFFFF)){//we get 240 iterations which returns "1"
+				a++;
+			}
+		}
+
+		while(b < 240){
+			if(write_audio_data_ASM(0X00000000)){//we get 240 iterations which returns "0"
+				b++;
+			}
+		}
+		}
+	return 0;
+}

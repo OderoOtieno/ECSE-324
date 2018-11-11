@@ -11,33 +11,35 @@
 		.global VGA_draw_point_ASM
 
         
-VGA_clear_pixelbuff_ASM:  PUSH {R0-R4}
-							LDR R0,=VGA_PIXEL_BUFFER
-							MOV R1, #0 //x
-							MOV R2, #0 //y 
+VGA_clear_pixelbuff_ASM:  PUSH {R0-R7,LR}
+						LDR R0,=VGA_PIXEL_BUFFER
+                        MOV R1, #0 //x
+                        MOV R2, #0 //y       
 
 CLEAR_PIXEL_ROW:		CMP R1,#320
-						ADD R1,R1,#1
-						ADD R3,R1,#0 // clone of R1
-						LSL R3,#1
-						ADD R0,R3,R0
-						BLT CLEAR_PIXEL_COLUMN //clear column by column
-						BEQ DONE_PIXEL_CLEAR
+                        ADD R3,R1,#0 // clone of R1
+                        LSL R3,#1
+						ADD R7,R0,#0
+                        ADD R7,R3,R7
+                        BLT CLEAR_PIXEL_COLUMN //clear column by column
+                        BEQ DONE_PIXEL_CLEAR
 
 CLEAR_PIXEL_COLUMN:
 
-                        CMP R2,#240
-			ADDLT R2,R2,#1
+			CMP R2,#240
 			MOVEQ R2,#0
+			ADDEQ R1,R1,#1
 			BEQ CLEAR_PIXEL_ROW
-			ADD R4,R0,#0 //copy of R0
-			LSL R2,#10
-			ADD R4,R4,R2
-			MOV R5,#0
-			STR R5,[R4]
+			ADD R4,R7,#0 //copy of R0
+			ADD R5,R2,#0
+			LSL R5,#10
+			ADD R4,R4,R5
+			MOV R6,#0x0
+			STRH R6,[R4]
+			ADDLT R2,R2,#1
 			B CLEAR_PIXEL_COLUMN
 			
-DONE_PIXEL_CLEAR: POP {R0-R4}
+DONE_PIXEL_CLEAR: POP {R0-R7,LR}
 				BX LR
 
 
@@ -47,41 +49,34 @@ DONE_PIXEL_CLEAR: POP {R0-R4}
 
 
 
-VGA_clear_charbuff_ASM:  PUSH {R0-R4}
-                        
-CLEAR_CHAR_ROW:         LDR R0,=VGA_CHAR_BUFFER
+VGA_clear_charbuff_ASM: PUSH {R0-R7,LR}
+						LDR R0,=VGA_CHAR_BUFFER
                         MOV R1, #0 //x
-                        MOV R2, #0 //y 
-                        CMP R1,#320
-
-                        ADD R1,R1,#1
+                        MOV R2, #0 //y       
+CLEAR_CHAR_ROW:   
+                        CMP R1,#80
                         ADD R3,R1,#0 // clone of R1
-                        LSL R3,#1
-                        ADD R0,R3,R0
+                        //LSL R3,#1
+						ADD R7,R0,#0
+                        ADD R7,R3,R7
                         BLT CLEAR_CHAR_COLUMN //clear column by column
                         BEQ DONE_CHAR_CLEAR
 
-CLEAR_CHAR_COLUMN:      CMP R2,#240
-			ADDLT R2,R2,#1
+CLEAR_CHAR_COLUMN:      CMP R2,#60
 			MOVEQ R2,#0
+			ADDEQ R1,R1,#1
 			BEQ CLEAR_CHAR_ROW
-			ADD R4,R0,#0 //copy of R0
-			LSL R2,#10
-			ADD R4,R4,R2
-			MOV R5,#0
-			STR R5,[R4]
+			ADD R4,R7,#0 //copy of R0
+			ADD R5,R2,#0
+			LSL R5,#7
+			ADD R4,R4,R5
+			MOV R6,#0x0
+			STRB R6,[R4]
+			ADDLT R2,R2,#1
 			B CLEAR_CHAR_COLUMN
 			
-DONE_CHAR_CLEAR: POP {R0-R4}
+DONE_CHAR_CLEAR: POP {R0-R7,LR}
 				BX LR
-
-
-
-
-
-
-
-
 
 
 
@@ -89,7 +84,7 @@ DONE_CHAR_CLEAR: POP {R0-R4}
 VGA_write_char_ASM: //R0 has x
                 //R1 has y
                 //R2 has char c 
-                PUSH {R0-R3}
+                PUSH {R0-R3,LR}
 
                 //X
                 CMP R0,#0
@@ -106,13 +101,13 @@ VGA_write_char_ASM: //R0 has x
 
                 LDR R3,=VGA_CHAR_BUFFER
                 LSL R1,#7
+                ADD R3,R3,R0
                 ADD R3,R3,R1
-                ADD R3,R3,R2
 
                 STRB R2,[R3]
 
 
-WRITE_CHAR_DONE:POP {R0-R3}
+WRITE_CHAR_DONE:POP {R0-R3,LR}
                 BX LR      
                 
 
@@ -121,19 +116,11 @@ WRITE_CHAR_DONE:POP {R0-R3}
 
 
 
-
-
-
-
-
-
-
-
 VGA_write_byte_ASM://R0 has x
-                //R1 has y
-                //R2 has colour
+                  //R1 has y
+                //R2 has byte
 
-                PUSH {R0-R9}
+				PUSH {R0-R9,LR}
 
                 //X
                 CMP R0,#0
@@ -149,23 +136,24 @@ VGA_write_byte_ASM://R0 has x
                 BGE WRITE_BYTE_DONE
                 
 
-                LDR R3,=VGA_PIXEL_BUFFER //address
+                LDR R3,=VGA_CHAR_BUFFER //address
                 MOV R4,R3 //copy of address
                 LSL R1,#7 //shift y by 7 bits
-                LDR R5,R0,#1 //Copy of x with +1 for extra char
+                ADD R5,R0,#1 //Copy of x with +1 for extra char
 
                 //make the new address 1 with x and y
                 ADD R3,R0,R3
                 ADD R3,R1,R3
 
                 //make the new address 2 with x+1 and y
-                ADD R4,R5,R4
-                ADD R4,R5,R4
-
+                ADD R4,R5,R4 //add the new X
+                ADD R4,R1,R4 //add the new Y
+				
+				MOV R6,#0
                 STR R2,[R6]
-                LDRH R7,[R6]
-                AND R8, R7,#0xF //second portion of bits
-                ASR R7,R7,#4 //first portion
+                LDRH R7,[R6] //load half word content into R7
+                AND R8, R7,#0xF //second byte to display
+                ASR R7,R7,#4 //First byte to display
 
                 MOV R9,R7
                 BL GEN_CHAR
@@ -178,10 +166,38 @@ VGA_write_byte_ASM://R0 has x
                 B WRITE_BYTE_DONE
 
 
+GEN_CHAR:       
+                CMP R9, #0x0
+				MOVEQ R9, #48
 
-                
+                CMP R9, #0x1
+                MOVEQ R9, #49
 
-GEN_CHAR:       CMP R9, #0xA
+                 CMP R9, #0x2
+                MOVEQ R9, #50
+
+                CMP R9, #0x3
+                MOVEQ R9, #51
+
+                 CMP R9, #0x4
+                MOVEQ R9, #52
+
+                CMP R9, #0x5
+                MOVEQ R9, #53
+
+                 CMP R9, #0x6
+                MOVEQ R9, #54
+
+                CMP R9, #0x7
+                MOVEQ R9, #55
+
+                CMP R9, #0x8
+                MOVEQ R9, #56
+
+                CMP R9, #0x9
+                MOVEQ R9, #57
+
+                CMP R9, #0xA
                 MOVEQ R9, #65
 
                 CMP R9, #0xB
@@ -198,11 +214,14 @@ GEN_CHAR:       CMP R9, #0xA
 
                 CMP R9, #0xF
                 MOVEQ R9, #70
+				
+				CMP R9, #0x0
+				MOVEQ R9, #48
 
                 BX LR
 
 
-WRITE_BYTE_DONE: POP {R0-R9}
+WRITE_BYTE_DONE: POP {R0-R9,LR}
                 BX LR
     
 
@@ -216,15 +235,15 @@ WRITE_BYTE_DONE: POP {R0-R9}
 VGA_draw_point_ASM:
                 //R0 has x
                 //R1 has y
-                //R2 has short colour
-                PUSH {R0-R3}
+                //R2 has char c 
+                PUSH {R0-R3,LR}
 
                 //X
                 CMP R0,#0
                 BLT WRITE_CHAR_DONE
                 CMP R0,#320
                 BGE WRITE_CHAR_DONE
-
+				LSL R0,#1
                 //Y
                 CMP R1,#0
                 BLT WRITE_CHAR_DONE
@@ -233,12 +252,12 @@ VGA_draw_point_ASM:
 
 
                 LDR R3,=VGA_PIXEL_BUFFER
-                LSL R1,#7
+                LSL R1,#10
+                ADD R3,R3,R0
                 ADD R3,R3,R1
-                ADD R3,R3,R2
+				
+                STRH R2,[R3]
 
-                STRB R2,[R3]
 
-
-WRITE_CHAR_DONE:POP {R0-R3}
-                BX LR   
+WRITE_DRAW_DONE:POP {R0-R3,LR}
+                BX LR    
