@@ -3,8 +3,6 @@
 #include "./drivers/inc/slider_switches.h"
 #include "./drivers/inc/pushbuttons.h"
 #include "./drivers/inc/ps2_keyboard.h"
-#include "./drivers/inc/audio.h"
-
 
 /*
 void test_char(){
@@ -73,7 +71,6 @@ int main (){
 }
 
 */
-/*
 
 int main(){
 	int x=0;
@@ -105,34 +102,4 @@ int main(){
 
     }
 
-}
-
-
-*/
-
-
-//write_audio_data_ASM
-
-
-
-int main()
-{
-	
-	//For 48k sample per second, and in order to get a 100Hz wave, we can obtain 48k/100=480. 480/2=240
-	while(1){
-	int a = 0;
-	int b = 0;
-		while(a < 240){
-			if(write_audio_data_ASM(0X00FFFFFF)){//we get 240 iterations which returns "1"
-				a++;
-			}
-		}
-
-		while(b < 240){
-			if(write_audio_data_ASM(0X00000000)){//we get 240 iterations which returns "0"
-				b++;
-			}
-		}
-		}
-	return 0;
 }

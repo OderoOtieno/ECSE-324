@@ -19,8 +19,6 @@
             <source_file filepath="true">drivers/inc/VGA.h</source_file>
             <source_file filepath="true">drivers/inc/ps2_keyboard.h</source_file>
             <source_file filepath="true">drivers/asm/ps2_keyboard.s</source_file>
-            <source_file filepath="true">drivers/asm/audio.s</source_file>
-            <source_file filepath="true">drivers/inc/audio.h</source_file>
         </source_files>
         <options>
             <compiler_flags>-g -O0</compiler_flags>
