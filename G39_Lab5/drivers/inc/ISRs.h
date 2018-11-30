@@ -2,6 +2,7 @@
 #define _ISRS
 
 	#include "./address_map_arm.h"
+	extern volatile int hps_tim0_int_flag; //timer flags
 
 	extern void A9_PRIV_TIM_ISR();
 	extern void HPS_GPIO1_ISR();
